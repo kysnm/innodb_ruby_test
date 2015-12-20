@@ -2,9 +2,10 @@ require 'mysql2'
 require 'faker'
 require 'i18n'
 
-I18n.locale = :ja
+## needed if using japanese names
+# I18n.locale = :ja
 require 'faker'
-## need if using email address
+## needed if using email address
 ## ref. http://qiita.com/kyanny/items/00ef3727c7738f2cc26c
 # Faker::Config.locale = :en
 
@@ -30,12 +31,11 @@ task :create_database do
       `lastname` varchar(255) COLLATE utf8_general_ci NOT NULL,
       `phonenumber` varchar(255) COLLATE utf8_general_ci NOT NULL,
       `state` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
-      `city` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
       `companyname` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
       `created_at` datetime NOT NULL,
       `updated_at` datetime NOT NULL,
       PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
   SQL
 
   # TODO bulk insert
@@ -44,17 +44,16 @@ task :create_database do
     lastname = Faker::Name::last_name
     phonenumber = Faker::PhoneNumber.phone_number
     state = Faker::Address.state
-    city = Faker::Address.city
     companyname = Faker::Company.name
     now = Time.now.strftime "%F %T"
 
     statement = client.prepare <<-"SQL"
       INSERT INTO #{@db_table}
-        (firstname, lastname, phonenumber, state, city, companyname, created_at, updated_at)
+        (firstname, lastname, phonenumber, state, companyname, created_at, updated_at)
       VALUES
-        (?, ?, ?, ?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?, ?)
     SQL
-    statement.execute(firstname, lastname, phonenumber, state, city, companyname, now, now)
+    statement.execute(firstname, lastname, phonenumber, state, companyname, now, now)
   end
   client.close
 end
