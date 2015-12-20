@@ -10,7 +10,7 @@ gem 'faker'
 gem 'rake'
 
 group :development do
-	gem 'pry'
-	gem 'pry-doc'
-	gem 'pry-byebug'
+  gem 'pry'
+  gem 'pry-doc'
+  gem 'pry-byebug'
 end
